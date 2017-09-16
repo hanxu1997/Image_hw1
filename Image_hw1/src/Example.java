@@ -38,7 +38,7 @@ public class Example {
 
     
     public static void main(String[] args) throws IOException {
-        File f = new File("D:\\1！中山大学大三第一学期\\数字图像处理\\hw1\\hw1\\hw1_input\\16.png");
+        File f = new File("C:\\Workspace\\hw1_input\\16.png");
         BufferedImage image = ImageIO.read(f);
         BufferedImage image1 = ImageIO.read(f);
        
