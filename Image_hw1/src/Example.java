@@ -40,7 +40,7 @@ public class Example {
     public static void main(String[] args) throws IOException {
         File f = new File("C:\\Workspace\\hw1_input\\16.png");
         BufferedImage image = ImageIO.read(f);
-        BufferedImage image1 = ImageIO.read(f);
+        // BufferedImage image1 = ImageIO.read(f);
        
         int w = image.getWidth();
         int h = image.getHeight();
@@ -61,7 +61,7 @@ public class Example {
             }
         }
         
-        showPng(image);
+     //   showPng(image);
     }
 
 }
