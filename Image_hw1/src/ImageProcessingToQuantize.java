@@ -47,7 +47,7 @@ public class ImageProcessingToQuantize {
 		if (newGray > 255) {
 			newGray = 255;
 		}
-		// 重新生成ARGB
+		// 量化后重新生成该点ARGB值
 		int quantizedGray = ((A << 24) & 0xFF000000)
 				| ((newGray << 16) & 0x00FF0000)
 				| ((newGray << 8) & 0x0000FF00)
@@ -74,7 +74,7 @@ public class ImageProcessingToQuantize {
         File f = new File("C:\\Workspace\\hw1_input\\16.png");
         BufferedImage image = ImageIO.read(f);
         BufferedImage original_gray = changeToGrayImg(image);
-        BufferedImage quantized_gray = imageQuantize(original_gray, 128);
+        BufferedImage quantized_gray = imageQuantize(original_gray, 8);
         Example.showPng(quantized_gray);
         
 	}
