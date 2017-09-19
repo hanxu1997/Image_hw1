@@ -78,7 +78,7 @@ public class BilineInterpolationToScale {
 	}
 	
 	public static BufferedImage getScaledImgByARGB(int [][][] scaledARGBInformation, int scaledWidth, int scaledHeight) {
-		BufferedImage scaledImg = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage scaledImg = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_BYTE_GRAY);
 		for (int x = 0; x < scaledHeight; x++) {
 			for (int y = 0; y < scaledWidth; y++) {
 				int A = scaledARGBInformation[x][y][0];
@@ -111,12 +111,12 @@ public class BilineInterpolationToScale {
 		createFile("\\scaled_Img");
         File f = new File(".\\input_Img\\16.png");
         BufferedImage image = ImageIO.read(f);
+        // System.out.println(image.getType());
+        // Ô­Í¼typeÎª10£¬BufferedImage.TYPE_BYTE_GRAY
         BufferedImage scaledImg = image;
         int j = 128;
         for (int i = 192; i >= 12; i = i/2) {
         	scaledImg = imgScaling(image, i, j);
-        	// System.out.println(scaledImg.getWidth());
-        	// System.out.println(scaledImg.getHeight());
         	String iString = String.valueOf(i);
         	String jString = String.valueOf(j);
         	ImageIO.write(scaledImg, "png", new File(".\\scaled_Img\\" + iString+ "X" + jString + "_scaled.png"));
@@ -128,8 +128,8 @@ public class BilineInterpolationToScale {
         ImageIO.write(scaledImg, "png", new File(".\\scaled_Img\\450X300_scaled.png"));
         scaledImg = imgScaling(image, 500, 200);
         ImageIO.write(scaledImg, "png", new File(".\\scaled_Img\\500X200_scaled.png"));
-        // scaledImg = imgScaling(image, 384, 256);
-        // ImageIO.write(scaledImg, "png", new File(".\\scaled_Img\\384X256_scaled.png"));
+        scaledImg = imgScaling(image, 384, 256);
+        ImageIO.write(scaledImg, "png", new File(".\\scaled_Img\\384X256_scaled.png"));
 
         
 	}

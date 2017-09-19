@@ -71,11 +71,18 @@ public class ImageProcessingToQuantize {
 		return quantizedImg;
 	}
 	public static void main(String[] args) throws IOException {
-        File f = new File("C:\\Workspace\\hw1_input\\16.png");
+		BilineInterpolationToScale.createFile("\\quantized_Img");
+		File f = new File(".\\input_Img\\16.png");
         BufferedImage image = ImageIO.read(f);
         BufferedImage original_gray = changeToGrayImg(image);
-        BufferedImage quantized_gray = imageQuantize(original_gray, 8);
-        Example.showPng(quantized_gray);
+        for (int i = 128; i >= 2; i = i /4) {
+        	BufferedImage quantized_gray = imageQuantize(original_gray, i);
+        	String iString = String.valueOf(i);
+        	ImageIO.write(quantized_gray, "png", new File(".\\quantized_Img\\" + iString+ "_level.png"));
+        }
+        
+        BufferedImage quantized_gray = imageQuantize(original_gray, 4);
+        ImageIO.write(quantized_gray, "png", new File(".\\quantized_Img\\4_level.png"));
         
 	}
 	
