@@ -7,8 +7,6 @@ import javax.imageio.ImageIO;
 public class BilineInterpolationToScale {
 
 
-	private static BufferedImage scaledImg;
-
 	public static BufferedImage imgScaling(BufferedImage originalImg, int scaledWidth, int scaledHeight) {
 		int [][][] originakARGBInformation = getAllARGB(originalImg);
 		int width = originalImg.getWidth();
@@ -96,16 +94,43 @@ public class BilineInterpolationToScale {
 		}
 		return scaledImg;
 	}
+	public static void createFile(String createpath) throws IOException {
+		File directory = new File(".");
+		String path = null;
+		path = directory.getCanonicalPath();//获取当前路径
+		path += createpath;
+		File file= new File(path);
+		if (!file.exists() && !file.isDirectory()) {
+			file.mkdir();
+		}
+		
+	}
+
 	
 	public static void main(String[] args) throws IOException {
-        File f = new File("C:\\Workspace\\hw1_input\\16.png");
+		createFile("\\scaled_Img");
+        File f = new File(".\\input_Img\\16.png");
         BufferedImage image = ImageIO.read(f);
-        System.out.println(image.getWidth());
-        System.out.println(image.getHeight());
-        scaledImg = imgScaling(image, 192, 128);
-        Example.showPng(scaledImg);
-        System.out.println(scaledImg.getWidth());
-        System.out.println(scaledImg.getHeight());
+        BufferedImage scaledImg = image;
+        int j = 128;
+        for (int i = 192; i >= 12; i = i/2) {
+        	scaledImg = imgScaling(image, i, j);
+        	// System.out.println(scaledImg.getWidth());
+        	// System.out.println(scaledImg.getHeight());
+        	String iString = String.valueOf(i);
+        	String jString = String.valueOf(j);
+        	ImageIO.write(scaledImg, "png", new File(".\\scaled_Img\\" + iString+ "X" + jString + "_scaled.png"));
+        	j = j/2;
+        }
+        scaledImg = imgScaling(image, 300, 200);
+        ImageIO.write(scaledImg, "png", new File(".\\scaled_Img\\300X200_scaled.png"));
+        scaledImg = imgScaling(image, 450, 300);
+        ImageIO.write(scaledImg, "png", new File(".\\scaled_Img\\450X300_scaled.png"));
+        scaledImg = imgScaling(image, 500, 200);
+        ImageIO.write(scaledImg, "png", new File(".\\scaled_Img\\500X200_scaled.png"));
+        // scaledImg = imgScaling(image, 384, 256);
+        // ImageIO.write(scaledImg, "png", new File(".\\scaled_Img\\384X256_scaled.png"));
+
         
 	}
 }
