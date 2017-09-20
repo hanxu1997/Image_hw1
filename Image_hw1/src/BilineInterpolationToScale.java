@@ -1,14 +1,20 @@
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 
 public class BilineInterpolationToScale {
 
-
+	/**
+	 * 输入原图和放缩后图像宽高
+	 * 得到原图每个像素点的ARGB值
+	 * 遍历放缩后图像每一个像素点
+	 * 双线性插值得到放缩后每个像素点的ARGB值信息，并由此信息得到放缩后图像返回
+	 * @param originalImg
+	 * @param scaledWidth
+	 * @param scaledHeight
+	 * @return
+	 */
 	public static BufferedImage imgScaling(BufferedImage originalImg, int scaledWidth, int scaledHeight) {
-		int [][][] originakARGBInformation = getAllARGB(originalImg);
+		int [][][] originalARGBInformation = getAllARGB(originalImg); // 得到原图每个像素点的ARGB值
 		int width = originalImg.getWidth();
 		int height = originalImg.getHeight();
 		int [][][] scaledARGBInformation = new int [scaledHeight][scaledWidth][4];
@@ -33,10 +39,10 @@ public class BilineInterpolationToScale {
 				
 				for (int i = 0; i < 4; i++) {
 					scaledARGBInformation[x][y][i] = (int)(
-							factor1 * originakARGBInformation[ensureRange((int)j, height-1)][ensureRange((int)k, width-1)][i] + 
-							factor2 * originakARGBInformation[ensureRange((int)(j+1), height-1)][ensureRange((int)k, width-1)][i] +
-							factor3 * originakARGBInformation[ensureRange((int)(j), height-1)][ensureRange((int)(k+1), width-1)][i] +
-							factor4 * originakARGBInformation[ensureRange((int)(j+1), height-1)][ensureRange((int)(k+1), width-1)][i]
+							factor1 * originalARGBInformation[ensureRange((int)j, height-1)][ensureRange((int)k, width-1)][i] + 
+							factor2 * originalARGBInformation[ensureRange((int)(j+1), height-1)][ensureRange((int)k, width-1)][i] +
+							factor3 * originalARGBInformation[ensureRange((int)(j), height-1)][ensureRange((int)(k+1), width-1)][i] +
+							factor4 * originalARGBInformation[ensureRange((int)(j+1), height-1)][ensureRange((int)(k+1), width-1)][i]
 							);
 				}
 				
@@ -46,6 +52,12 @@ public class BilineInterpolationToScale {
 		
 	}
 	
+	/**
+	 * 确保在原图中取得待插值所用的点时不会越界
+	 * @param num
+	 * @param max
+	 * @return
+	 */
 	public static int ensureRange(int num, int max) {
 		if (num > max) {
 			return max;
@@ -56,7 +68,12 @@ public class BilineInterpolationToScale {
 		return num;
 	}
 	
-	
+	/**
+	 * 用三维矩阵存储原图每一个像素点的ARGB值
+	 * (x,y)处A,R,G,B值分别存储在ARGBInformation[x][y][0:4]中
+	 * @param originalImg
+	 * @return
+	 */
 	public static int [][][] getAllARGB(BufferedImage originalImg) {
 		int width = originalImg.getWidth();
 		int height = originalImg.getHeight();
@@ -77,6 +94,13 @@ public class BilineInterpolationToScale {
 		return ARGBInformation;
 	}
 	
+	/**
+	 * 由存储放缩后图像ARGB值的三维矩阵得到放缩后图像
+	 * @param scaledARGBInformation
+	 * @param scaledWidth
+	 * @param scaledHeight
+	 * @return
+	 */
 	public static BufferedImage getScaledImgByARGB(int [][][] scaledARGBInformation, int scaledWidth, int scaledHeight) {
 		BufferedImage scaledImg = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_BYTE_GRAY);
 		for (int x = 0; x < scaledHeight; x++) {
@@ -94,43 +118,7 @@ public class BilineInterpolationToScale {
 		}
 		return scaledImg;
 	}
-	public static void createFile(String createpath) throws IOException {
-		File directory = new File(".");
-		String path = null;
-		path = directory.getCanonicalPath();//获取当前路径
-		path += createpath;
-		File file= new File(path);
-		if (!file.exists() && !file.isDirectory()) {
-			file.mkdir();
-		}
-		
-	}
-
 	
-	public static void main(String[] args) throws IOException {
-		createFile("\\scaled_Img");
-        File f = new File(".\\input_Img\\16.png");
-        BufferedImage image = ImageIO.read(f);
-        // System.out.println(image.getType());
-        // 原图type为10，BufferedImage.TYPE_BYTE_GRAY
-        BufferedImage scaledImg = image;
-        int j = 128;
-        for (int i = 192; i >= 12; i = i/2) {
-        	scaledImg = imgScaling(image, i, j);
-        	String iString = String.valueOf(i);
-        	String jString = String.valueOf(j);
-        	ImageIO.write(scaledImg, "png", new File(".\\scaled_Img\\" + iString+ "X" + jString + "_scaled.png"));
-        	j = j/2;
-        }
-        scaledImg = imgScaling(image, 300, 200);
-        ImageIO.write(scaledImg, "png", new File(".\\scaled_Img\\300X200_scaled.png"));
-        scaledImg = imgScaling(image, 450, 300);
-        ImageIO.write(scaledImg, "png", new File(".\\scaled_Img\\450X300_scaled.png"));
-        scaledImg = imgScaling(image, 500, 200);
-        ImageIO.write(scaledImg, "png", new File(".\\scaled_Img\\500X200_scaled.png"));
-        scaledImg = imgScaling(image, 384, 256);
-        ImageIO.write(scaledImg, "png", new File(".\\scaled_Img\\384X256_scaled.png"));
 
-        
-	}
+
 }

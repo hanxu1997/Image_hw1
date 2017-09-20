@@ -1,15 +1,22 @@
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 
 
 public class ImageProcessingToQuantize {
+	/**
+	 * 灰度值对应R,G,B的转换因子
+	 */
 	public static final double R_FACTOR = 0.30;
 	public static final double G_FACTOR = 0.59;
 	public static final double B_FACTOR = 0.11;
 	
+	
+	/**
+	 * 利用灰度转换公式将原图转换为灰度图像
+	 * 注：所用输入图像类型为TYPE_BYTE_GRAY，已经是灰度图像，可以不用转化
+	 * @param originalImg
+	 * @return
+	 */
 	public static BufferedImage changeToGrayImg(BufferedImage originalImg) {
 		int width = originalImg.getWidth();
         int height = originalImg.getHeight();
@@ -32,11 +39,40 @@ public class ImageProcessingToQuantize {
         return grayImg;
 	}
 	
-	public static int quantizedGray(int grayRGB, int level) {
+	/**
+	 * 量化灰度图像
+	 * 遍历每个像素点，获得量化后像素值并set
+	 * @param grayImg
+	 * @param level
+	 * @return
+	 */
+	public static BufferedImage imageQuantize(BufferedImage grayImg, int level) {
+		int width = grayImg.getWidth();
+		int height = grayImg.getHeight();
+		BufferedImage quantizedImg = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_GRAY); // 初始化灰度图像
+		
+		for (int x = 0; x < height; x++) {
+			for (int y = 0; y < width; y++) {
+				int grayARGB = grayImg.getRGB(y, x);
+				int quantized_grayARGB = quantizedGray(grayARGB, level);
+				quantizedImg.setRGB(y, x, quantized_grayARGB);
+			}
+		}
+		return quantizedImg;
+	}
+	
+	/**
+	 * 已知原ARGB值
+	 * 由量化level重新生成ARGB值
+	 * @param grayARGB
+	 * @param level
+	 * @return
+	 */
+	public static int quantizedGray(int grayARGB, int level) {
 		int length = (int)(255/(level-1));
 		// System.out.println(length);
-		int A = (grayRGB >> 24) & 0xFF;
-		int grayValue = grayRGB & 0xFF; // 取分量
+		int A = (grayARGB >> 24) & 0xFF;
+		int grayValue = grayARGB & 0xFF; // 取分量
 		int newGray = 0;
 		double compareToLevel = ((double)grayValue - (int)(grayValue/length) * length)/length;
 		if (compareToLevel >= 0.5) {
@@ -53,37 +89,10 @@ public class ImageProcessingToQuantize {
 				| ((newGray << 8) & 0x0000FF00)
 				| (newGray & 0x000000FF);
 		return quantizedGray;
-		
-		
 	}
-	public static BufferedImage imageQuantize(BufferedImage grayImg, int level) {
-		int width = grayImg.getWidth();
-		int height = grayImg.getHeight();
-		BufferedImage quantizedImg = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_GRAY);
-		
-		for (int x = 0; x < height; x++) {
-			for (int y = 0; y < width; y++) {
-				int grayRGB = grayImg.getRGB(y, x);
-				int quantized_grayRGB = quantizedGray(grayRGB, level);
-				quantizedImg.setRGB(y, x, quantized_grayRGB);
-			}
-		}
-		return quantizedImg;
-	}
-	public static void main(String[] args) throws IOException {
-		BilineInterpolationToScale.createFile("\\quantized_Img");
-		File f = new File(".\\input_Img\\16.png");
-        BufferedImage image = ImageIO.read(f);
-        BufferedImage original_gray = changeToGrayImg(image);
-        for (int i = 128; i >= 2; i = i /4) {
-        	BufferedImage quantized_gray = imageQuantize(original_gray, i);
-        	String iString = String.valueOf(i);
-        	ImageIO.write(quantized_gray, "png", new File(".\\quantized_Img\\" + iString+ "_level.png"));
-        }
-        
-        BufferedImage quantized_gray = imageQuantize(original_gray, 4);
-        ImageIO.write(quantized_gray, "png", new File(".\\quantized_Img\\4_level.png"));
-        
-	}
+	
+
+	
+
 	
 }
