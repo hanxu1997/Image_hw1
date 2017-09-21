@@ -52,21 +52,6 @@ public class BilineInterpolationToScale {
 		
 	}
 	
-	/**
-	 * 确保在原图中取得待插值所用的点时不会越界
-	 * @param num
-	 * @param max
-	 * @return
-	 */
-	public static int ensureRange(int num, int max) {
-		if (num > max) {
-			return max;
-		}
-		if (num < 0) {
-			return 0;
-		}
-		return num;
-	}
 	
 	/**
 	 * 用三维矩阵存储原图每一个像素点的ARGB值
@@ -93,6 +78,24 @@ public class BilineInterpolationToScale {
 		}
 		return ARGBInformation;
 	}
+	
+	
+	/**
+	 * 确保在原图中取得待插值所用的点时不会越界
+	 * @param num
+	 * @param max
+	 * @return
+	 */
+	public static int ensureRange(int num, int max) {
+		if (num > max) {
+			return max;
+		}
+		if (num < 0) {
+			return 0;
+		}
+		return num;
+	}
+
 	
 	/**
 	 * 由存储放缩后图像ARGB值的三维矩阵得到放缩后图像

@@ -11,6 +11,8 @@ public class ShowImage {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(800, 800);
         frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
+        frame.setTitle("15331416 ’‘∫Æ–Ò -16.png");
         return frame;
     }
     

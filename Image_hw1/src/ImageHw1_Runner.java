@@ -65,7 +65,7 @@ public class ImageHw1_Runner {
 		createFile("\\quantized_Img");
         File f = new File(".\\input_Img\\16.png");
         BufferedImage image = ImageIO.read(f);
-        // ShowImage.showPng(image);
+        ShowImage.showPng(image);
 		scale(image);
 		quantize(image);
 	}
