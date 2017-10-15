@@ -61,13 +61,13 @@ public class ImageHw1_Runner {
 	public static void main(String[] args) throws IOException {
 		createFile("\\scaled_Img");
 		createFile("\\quantized_Img");
-       // File f = new File(".\\input_Img\\16.png");
-       // BufferedImage image = ImageIO.read(f);
+        File f = new File(".\\input_Img\\16.png");
+        BufferedImage image = ImageIO.read(f);
 		
-		// 生成jar包
-		 java.net.URL imgURL = ImageHw1_Runner.class.getResource("/input_Img/16.png");
-		 BufferedImage image = ImageIO.read(imgURL);
-		 
+		/** 生成jar包
+		 *java.net.URL imgURL = ImageHw1_Runner.class.getResource("/input_Img/16.png");
+		 *BufferedImage image = ImageIO.read(imgURL);
+		 */
 
         ShowImage.showPng(image);
 		scale(image);

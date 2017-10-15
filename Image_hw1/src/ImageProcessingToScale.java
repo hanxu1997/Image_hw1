@@ -48,6 +48,7 @@ public class ImageProcessingToScale {
 				originalArgs[1] = originalARGB[ensureRange((int)(j+1), rangeRow)][ensureRange((int)k, rangeCol)];
 				originalArgs[2] = originalARGB[ensureRange((int)(j), rangeRow)][ensureRange((int)(k+1), rangeCol)];
 				originalArgs[3] = originalARGB[ensureRange((int)(j+1), rangeRow)][ensureRange((int)(k+1), rangeCol)];
+				// 得到变换后图像(x,y)处ARGB值
 				scaledARGB[x][y] = getScaledARGB(originalArgs, factors);	
 			}
 		}
